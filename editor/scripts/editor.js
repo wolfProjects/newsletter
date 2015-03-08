@@ -22,31 +22,43 @@ var app = {
 
         function show(editElem) {
             var titleElem = $('.editPanelWrap .panel-heading span'),
-                inputElem = $('.editPanelWrap input'),
-                textElem = $('.editPanelWrap textarea');
+            // Wrap is wrapper, dom is the element user will write info in
+                editLinkWrap = $('.edit-link'),
+                editLinkDom = editLinkWrap.find('input'),
+
+                editImgLinkWrap = $('.edit-imglink'),
+                editImgLinkDom = editImgLinkWrap.find('input'),
+
+                editTextWrap = $('.edit-para'),
+                editTextDom = editTextWrap.find('textarea');
 
             // clean edit-ok button event bind
-            $('.editPanelWrap .edit-ok').unbind('click');
+            $('.edit-ok').unbind('click');
 
             switch (editElemType)
             {
                 case editTypeGroup[0]:
                     // edit href and link text
                     titleElem.text('Edit link');
-                    inputElem.val(editElem.prop('href'))
-                        .show();
-                    textElem.val(editElem.text())
-                        .show();
+                    editImgLinkWrap.hide();
+
+                    editLinkDom.val(editElem.prop('href'));
+                    editLinkWrap.show();
+                    editTextDom.val(editElem.text());
+                    editTextWrap.show();
 
                     // update editing data
                     $('.editPanelWrap .edit-ok').bind('click', rewriteTextLink);
                     break;
                 case editTypeGroup[1]:
-                    // edit href
+                    // edit href and img src
                     titleElem.text('Edit link');
-                    textElem.hide();
-                    inputElem.val(editElem.prop('href'))
-                        .show();
+                    editTextWrap.hide();
+
+                    editLinkDom.val(editElem.prop('href'));
+                    editImgLinkDom.val(editElem.find('img').prop('src'));
+                    editLinkWrap.show();
+                    editImgLinkWrap.show();
 
                     // update editing data
                     $('.editPanelWrap .edit-ok').bind('click', rewriteImgLink);
@@ -54,9 +66,23 @@ var app = {
                 case editTypeGroup[2]:
                     // edit paragragh
                     titleElem.text('Edit Paragragh');
-                    inputElem.hide();
-                    textElem.val(editElem.text())
-                        .show();
+                    editLinkWrap.hide();
+                    editImgLinkWrap.hide();
+
+                    // for inner markup
+                    var oldParagraph = '';
+
+                    // if <a></a> in paragraph
+                    if (editElem.find('a').length > 0) {
+                        // extract <a></a>'s text
+                        oldParagraph = editElem.text()
+                            .replace(editElem.find('a').text(), '');
+                    } else {
+                        oldParagraph = editElem.text();
+                    }
+
+                    editTextDom.val(oldParagraph);
+                    editTextWrap.show();
 
                     // update editing data
                     $('.editPanelWrap .edit-ok').bind('click', rewritePara);
@@ -64,18 +90,32 @@ var app = {
             }
 
             function rewriteTextLink (){
-                editElem.attr('href', $('.editPanelWrap input').val());
-                editElem.text($('.editPanelWrap textarea').val());
+                editElem.attr('href', editLinkDom.val());
+                editElem.text(editTextDom.val());
                 app.closePanel();
             }
 
             function rewriteImgLink (){
-                editElem.attr('href', $('.editPanelWrap input').val());
+                editElem.attr('href', editLinkDom.val());
+                editElem.find('img').attr('src', editImgLinkDom.val());
                 app.closePanel();
             }
 
             function rewritePara (){
-                editElem.text($('.editPanelWrap textarea').val());
+                if (editElem.find('a').length > 0) {
+                    // get link dom
+                    var paraDom = editElem.html(),
+                        start = paraDom.indexOf('<a'),
+                        end = paraDom.indexOf('</a>')+1,
+                        linkDom = paraDom.substr(start, end);
+
+                    // append link who has been extracted
+                    editElem.text(editTextDom.val())
+                        .append($(linkDom));
+                } else {
+                    editElem.text(editTextDom.val());
+                }
+
                 app.closePanel();
             }
 
@@ -117,7 +157,7 @@ var app = {
         var fullHtmlDom = $('<p data-edittype="para"></p>').text(fullHtmlStr);
         app.showPanel(fullHtmlDom);
         $('.editPanel .panel-heading span').text('Please copy the whole email html code below.');
-        $('.editPanel .edit-content').focus().select();
+        $('.editPanel .edit-para textarea').focus().select();
     },
     init: function (){
         var headerBar = '<!--topbar--><div class="wf-editor-header"><div class="btn btn-normal resetEmail">Reset</div>&nbsp;&nbsp;<div class="btn btn-success createEmail">Create</div><div class="cb"></div></div><!--topbar end-->';
