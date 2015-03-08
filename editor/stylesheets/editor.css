@@ -1,0 +1,86 @@
+.cb { clear: both;}
+.fl { float: left;}
+.fr { float: right;}
+
+/* editor header */
+.wf-editor-header {
+    background: #ddd;
+    padding: 10px 20px;
+    text-align: right;
+}
+
+.wf-editor-header .btn {
+    padding: 0 15px;
+    color: #fff;
+    font-size: 14px;
+}
+
+.wf-editor-header .btn-normal {
+    background: #999;
+}
+
+.wf-editor-header .btn-success {
+    background: #5cb85c;
+}
+
+/* link cursor style */
+.header-logo:hover,
+.header-content:hover,
+.header-entry a:hover,
+.row-list .row-title:hover,
+.row-list p:hover,
+.row-list p a:hover,
+.titleLink:hover,
+a[data-edittype="imglink"]:hover
+{ outline: 1px dashed #FF0000; opacity: .65;}
+
+.row-list p a:hover { outline: 2px dashed #ff0000; opacity: 1;}
+
+/* editor panel */
+.editPanelWrap {
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 150px 0 0 0;
+    background: rgba(0, 0, 0, .25);
+}
+
+.editPanel {
+    width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.edit-content {
+    display: block;
+    width: 100%;
+    height: 300px;
+    padding: 15px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-color: #ccc;
+    outline: none;
+    resize: none;
+}
+
+.edit-ok {
+    padding-left: 30px;
+    padding-right: 30px;
+    margin-right: 10px;
+}
+
+.edit-close {
+    padding: 2px 8px;
+    color: #f1f1f1;
+    font-size: 14px;
+    background: #666;
+    cursor: pointer;
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    font-style: normal;
+}
