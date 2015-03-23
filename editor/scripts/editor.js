@@ -173,6 +173,11 @@ var app = {
             app.createEmail();
         });
 
+        // bind reset
+        $('.resetEmail').click(function (){
+            window.location.reload(true);
+        });
+
         // bind close method
         $('.edit-cancel, .edit-close').click(function (){
             app.closePanel();
