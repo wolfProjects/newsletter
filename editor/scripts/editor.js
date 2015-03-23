@@ -4,7 +4,7 @@ var app = {
     edit: function (){
 
         // bind editor event
-        $('a, p').click(function (e){
+        $('body').on('click', 'a, p', function (e){
             e.stopPropagation();
             app.showPanel($(this));
 
